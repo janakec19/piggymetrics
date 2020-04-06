@@ -7,7 +7,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @SpringBootApplication
-@EnableResourceServer
+@EnableResourceServer //The @EnableResourceServer annotation enables our 
+//application to behave as a Resource Server by configuring an 
+//OAuth2AuthenticationProcessingFilter and other equally important components.
 @EnableDiscoveryClient
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthApplication {

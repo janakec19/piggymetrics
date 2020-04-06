@@ -47,7 +47,7 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
                 .scopes("ui")
                 .and()
                 .withClient("account-service")
-                .secret(env.getProperty("ACCOUNT_SERVICE_PASSWORD"))
+                .secret("myaccount")
                 .authorizedGrantTypes("client_credentials", "refresh_token")
                 .scopes("server")
                 .and()

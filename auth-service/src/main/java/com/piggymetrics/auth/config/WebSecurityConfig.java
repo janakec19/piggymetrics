@@ -16,28 +16,28 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private MongoUserDetailsService userDetailsService;
+	@Autowired
+	private MongoUserDetailsService userDetailsService;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        // @formatter:off
-        http
-                .authorizeRequests().anyRequest().authenticated()
-                .and()
-                .csrf().disable();
-        // @formatter:on
-    }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		// @formatter:off
+		http
+        .csrf().disable()
+        .anonymous().disable()
+        .authorizeRequests()
+        .antMatchers("/oauth/**").permitAll();
+		// @formatter:on
+	}
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
-                .passwordEncoder(new BCryptPasswordEncoder());
-    }
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+	}
 
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+	@Override
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
 }

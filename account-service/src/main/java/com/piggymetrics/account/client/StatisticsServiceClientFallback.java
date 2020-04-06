@@ -1,18 +1,36 @@
 package com.piggymetrics.account.client;
 
-import com.piggymetrics.account.domain.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.piggymetrics.account.domain.Account;
+
+import feign.hystrix.FallbackFactory;
+
 /**
  * @author cdov
  */
+
 @Component
-public class StatisticsServiceClientFallback implements StatisticsServiceClient {
-    private static final Logger LOGGER = LoggerFactory.getLogger(StatisticsServiceClientFallback.class);
-    @Override
-    public void updateStatistics(String accountName, Account account) {
-        LOGGER.error("Error during update statistics for account: {}", accountName);
+public class StatisticsServiceClientFallback implements FallbackFactory<StatisticsServiceClient> {
+	private final Logger log = LoggerFactory.getLogger(getClass());
+   
+	@Override
+    public StatisticsServiceClient create(Throwable cause) {
+        return new StatisticsServiceClient() {
+           
+			@Override
+			public void updateStatistics(String accountName, Account account) {
+				log.error("update failed fue to {}",cause);
+				
+			}
+
+			@Override
+			public Object getStatisticsByAccountName(String accountName) {
+				log.error("get failed fue to {}",cause);
+				return null;
+			}
+        };
     }
 }

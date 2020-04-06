@@ -19,12 +19,12 @@ import java.io.IOException;
 import java.text.MessageFormat;
 
 @Service
-@RefreshScope
+//@RefreshScope
 public class EmailServiceImpl implements EmailService {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
-	@Autowired
+	//@Autowired
 	private JavaMailSender mailSender;
 
 	@Autowired

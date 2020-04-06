@@ -8,6 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
+
 import java.security.Principal;
 
 @RestController
@@ -35,5 +37,10 @@ public class AccountController {
 	@RequestMapping(path = "/", method = RequestMethod.POST)
 	public Account createNewAccount(@Valid @RequestBody User user) {
 		return accountService.create(user);
+	}
+	
+	@RequestMapping(path = "/stats/{name}", method = RequestMethod.GET)
+	public Account getAccountStats(@PathVariable String name) {
+		return accountService.getAccountStats(name);
 	}
 }

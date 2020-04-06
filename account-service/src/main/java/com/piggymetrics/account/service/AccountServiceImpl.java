@@ -1,5 +1,15 @@
 package com.piggymetrics.account.service;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.piggymetrics.account.client.AuthServiceClient;
 import com.piggymetrics.account.client.StatisticsServiceClient;
 import com.piggymetrics.account.domain.Account;
@@ -7,14 +17,6 @@ import com.piggymetrics.account.domain.Currency;
 import com.piggymetrics.account.domain.Saving;
 import com.piggymetrics.account.domain.User;
 import com.piggymetrics.account.repository.AccountRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -34,9 +36,15 @@ public class AccountServiceImpl implements AccountService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@HystrixCommand(fallbackMethod = "findByNameInMemory")
 	public Account findByName(String accountName) {
 		Assert.hasLength(accountName);
 		return repository.findByName(accountName);
+	}
+	
+	public Account findByNameInMemory(String accountName) {
+		log.info("Call back from hystrix with arg {}",accountName);
+		return new Account();
 	}
 
 	/**
@@ -88,5 +96,12 @@ public class AccountServiceImpl implements AccountService {
 		log.debug("account {} changes has been saved", name);
 
 		statisticsClient.updateStatistics(name, account);
+	}
+
+	@Override
+	public Account getAccountStats(String name) {
+		Object accountStats=statisticsClient.getStatisticsByAccountName(name);
+		log.info("Found Account stats {}",accountStats);
+		return new Account();
 	}
 }

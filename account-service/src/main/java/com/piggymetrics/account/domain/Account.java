@@ -5,6 +5,10 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -12,12 +16,25 @@ import java.util.List;
 
 @Document(collection = "accounts")
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@Builder
+@AllArgsConstructor
 public class Account {
 
 	@Id
 	private String name;
 
 	private Date lastSeen;
+
+	public Account(String name, Date lastSeen) {
+		super();
+		this.name = name;
+		this.lastSeen = lastSeen;
+	}
+
+	public Account() {
+		super();
+	}
 
 	@Valid
 	private List<Item> incomes;

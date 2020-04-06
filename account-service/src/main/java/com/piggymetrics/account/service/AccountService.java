@@ -31,4 +31,6 @@ public interface AccountService {
 	 * @param update
 	 */
 	void saveChanges(String name, Account update);
+
+	Account getAccountStats(String name);
 }

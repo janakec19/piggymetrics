@@ -28,9 +28,7 @@ backup:
 spring:
   data:
     mongodb:
-      host: notification-mongodb
-      username: user
-      password: ${MONGODB_PASSWORD}
+      host: localhost
       database: piggymetrics
       port: 27017
   mail:
